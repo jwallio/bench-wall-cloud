@@ -1,0 +1,18 @@
+// Cloudflare Workers static assets: the site is plain files in dist/, served from Cloudflare's edge.
+// `npx wrangler deploy` (or the GitHub Action) uploads dist/ and attaches bench.wall.cloud.
+{
+  "name": "bench-wall-cloud",
+  "compatibility_date": "2026-11-26",
+  "assets": {
+    "directory": "./dist"
+  },
+  // Needs wall.cloud to be an active zone in the same Cloudflare account.
+  // Cloudflare creates the DNS record and certificate for the custom domain.
+  "routes": [
+    { "pattern": "bench.wall.cloud", "custom_domain": true }
+  ],
+  // Also reachable at bench-wall-cloud.<account>.workers.dev, handy before DNS is ready.
+  // Set to false once bench.wall.cloud works, to keep a single public address.
+  "workers_dev": true,
+  "preview_urls": false
+}

@@ -1,0 +1,16 @@
+[
+  {
+    "id": "nov2026-nc",
+    "name": "Nov 21–23, 2026 · North Carolina",
+    "state": "NC",
+    "window_utc": ["2026-11-21T12:00:00Z", "2026-11-24T00:00:00Z"],
+    "window_local": "Nov 21, 7 a.m. – Nov 23, 7 p.m. EST",
+    "bbox": {"north": 37.0, "south": 33.5, "west": -84.75, "east": -75.0},
+    "models": [
+      {"id": "NOAA GFS", "label": "GFS", "store": "noaa-gfs-forecast/v0.2.7.zarr", "init": "2026-11-21T06:00:00Z"},
+      {"id": "NOAA GEFS", "label": "GEFS (mean)", "store": "noaa-gefs-forecast-35-day/v0.2.0.zarr", "init": "2026-11-21T00:00:00Z", "ensemble": true},
+      {"id": "ECMWF IFS ENS", "label": "IFS ENS (mean)", "store": "ecmwf-ifs-ens-forecast-15-day-0-25-degree/v0.1.0.zarr", "init": "2026-11-21T00:00:00Z", "ensemble": true},
+      {"id": "ECMWF AIFS Single", "label": "AIFS Single", "store": "ecmwf-aifs-single-forecast/v0.1.0.zarr", "init": "2026-11-21T06:00:00Z"}
+    ]
+  }
+]
