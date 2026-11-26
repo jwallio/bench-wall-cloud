@@ -17,6 +17,8 @@ jobs:
   build-deploy:
     runs-on: ubuntu-latest
     timeout-minutes: 45
+    env:
+      HAS_CLOUDFLARE: ${{ secrets.CLOUDFLARE_API_TOKEN != '' && secrets.CLOUDFLARE_ACCOUNT_ID != '' }}
     steps:
       - uses: actions/checkout@v6
 
@@ -27,21 +29,35 @@ jobs:
 
       - run: pip install -r requirements.txt
 
-      # Observation years (about 200 MB) and the compiled kernel. A cold run rebuilds them in a few minutes;
+      # Observation years (about 200 MB) and the compiled kernel. A cold run rebuilds them in about 3 minutes;
       # warm runs only re-read the current year.
       - name: Restore data cache
-        uses: actions/cache@v5
+        uses: actions/cache/restore@v5
         with:
           path: .cache
           key: bench-cache-${{ github.run_id }}
           restore-keys: bench-cache-
 
       - name: Build site and data
+        id: build
         run: bash scripts/build.sh
 
+      # Saved whenever the build worked, even if the deploy below fails.
+      - name: Save data cache
+        if: always() && steps.build.outcome == 'success'
+        uses: actions/cache/save@v5
+        with:
+          path: .cache
+          key: bench-cache-${{ github.run_id }}
+
       - name: Deploy to Cloudflare
+        if: env.HAS_CLOUDFLARE == 'true'
         uses: cloudflare/wrangler-action@v4
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
           command: deploy
+
+      - name: Deploy skipped
+        if: env.HAS_CLOUDFLARE != 'true'
+        run: echo "::notice title=Deploy skipped::Add the CLOUDFLARE_API_TOKEN and CLOUDFLARE_ACCOUNT_ID repository secrets to deploy to bench.wall.cloud."
