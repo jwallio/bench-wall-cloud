@@ -1,4 +1,4 @@
-# Forecast Verification Bench · bench.wall.cloud
+# Model Verification Bench · bench.wall.cloud
 
 A daily scorecard of weather models against U.S. airport (ASOS) observations, with climatology and
 persistence baselines, station maps for every state, and gridded storm case studies.

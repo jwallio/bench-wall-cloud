@@ -1,4 +1,4 @@
-/* Forecast Verification Bench · bench.wall.cloud */
+/* Model Verification Bench · bench.wall.cloud */
 "use strict";
 {
 const $=s=>document.querySelector(s),$$=s=>[...document.querySelectorAll(s)];
