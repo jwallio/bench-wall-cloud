@@ -6,14 +6,14 @@
 <meta property="og:description" content="How well do weather models really do? Daily scores at 2,600+ U.S. stations, with climatology and persistence baselines.">
 <meta property="og:type" content="website"><meta property="og:url" content="https://bench.wall.cloud/"><meta property="og:image" content="https://bench.wall.cloud/og.png">
 <meta name="twitter:card" content="summary_large_image"><link rel="canonical" href="https://bench.wall.cloud/">
-<link rel="icon" href="favicon.svg" type="image/svg+xml"><meta name="theme-color" content="#10141b">
+<link rel="icon" href="favicon.svg" type="image/svg+xml"><meta name="theme-color" content="#0e1a27">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Space+Grotesk:wght@600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..800&display=swap" rel="stylesheet">
 <style>
 /* VOICE: a forecast desk's verification report: precise, calm, numbers first
    IDEA: the station plot a forecaster checks each morning, turned into a model scoring bench
    PICTURE: the county map with every ASOS station coloured by how well the chosen model did
-   COLOUR and TYPE: white by day, deep slate by night, one blue ramp for magnitude, warm/cool for bias; Space Grotesk + Inter
+   COLOUR and TYPE: white by day, deep slate by night, one blue ramp for magnitude, warm/cool for bias; Archivo (wide for headings, normal for text)
    LAYOUT: finding and figures, one row of menus, the station map, then scorecard, lead-time and station-spread charts */
 :root{color-scheme:light dark;
 --bg:light-dark(#ffffff,#10141b);--panel:light-dark(#f2f4f7,#171c25);--ink:light-dark(#111722,#eef1f6);--mute:light-dark(#566070,#9ba5b4);
@@ -22,13 +22,13 @@
 --c6:light-dark(#008a17,#0aac23);--c7:light-dark(#6a4ce2,#9887ef);--c8:light-dark(#ec4647,#eb6263);--mid:light-dark(#efefef,#383838)}
 :root[data-theme=light]{color-scheme:light}:root[data-theme=dark]{color-scheme:dark}
 *{box-sizing:border-box;min-width:0}
-body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.55 Inter,system-ui,sans-serif;overflow-x:clip}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.55 Archivo,system-ui,sans-serif;overflow-x:clip}
 .band{padding:clamp(20px,3vw,40px) max(4vw,16px);max-width:1480px;margin:0 auto}
-h1,h2{font-family:"Space Grotesk",Inter,sans-serif;line-height:1.08;text-wrap:balance;margin:0}
+h1,h2,.gc b,.deep h3{font-stretch:116%}h1,h2{font-family:Archivo,system-ui,sans-serif;line-height:1.08;text-wrap:balance;margin:0}
 h1{font-size:clamp(28px,3.4vw,44px)}h2{font-size:22px;margin-bottom:4px}
 .sub{color:var(--mute);margin:8px 0 0}.note{font-size:13px;color:var(--mute);margin:4px 0}
 .figs{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px;margin-top:20px}
-.fig1{background:var(--panel);border-radius:10px;padding:12px 14px}.fig1 b{display:block;font:700 clamp(24px,2.6vw,32px)/1.1 "Space Grotesk",sans-serif;white-space:nowrap}.fig1 span{font-size:13px;color:var(--mute)}
+
 .bar{background:var(--bg);border-block:1px solid var(--line);z-index:5}
 @media(min-width:900px){.bar{position:sticky;top:0}}
 .bar .band{display:flex;flex-wrap:wrap;gap:10px 16px;align-items:flex-end;padding-block:12px}
@@ -54,14 +54,29 @@ button:focus-visible,select:focus-visible,td:focus-visible{outline:2px solid var
 .focus{background:var(--panel);border-radius:10px;padding:12px 14px;margin-top:16px}
 .focus button{min-height:36px;margin-top:6px;border:1px solid var(--line);background:var(--bg);border-radius:8px;padding:0 12px;cursor:pointer}
 .msg{padding:40px 0;color:var(--mute)}
-.brandbar{background:var(--ink);color:var(--bg)}.brandbar .band{display:flex;flex-wrap:wrap;gap:4px 14px;align-items:baseline;padding-block:10px}
-.brand{color:var(--bg);font:700 17px/1.2 "Space Grotesk",Inter,sans-serif;text-decoration:none}.bname{font-size:14px;opacity:.85}.fresh{margin-left:auto;font-size:13px;opacity:.7}
+.hero{--hi:#eef4f9;--hm:#a9bccd;background-color:#0e1a27;color:var(--hi);background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1440 520' preserveAspectRatio='xMidYMid slice'%3E%3Cg fill='none' stroke='%235bb6ee' stroke-width='1.2'%3E%3Cpath opacity='.28' d='M1010 260c0-70 70-118 160-118s170 52 170 122-80 116-170 116-160-50-160-120z'/%3E%3Cpath opacity='.24' d='M930 262c0-118 110-196 248-196s262 86 262 200-120 196-262 196-248-82-248-200z'/%3E%3Cpath opacity='.2' d='M850 264c0-160 150-266 330-266 120 0 220 40 290 104M1470 430c-70 70-170 110-290 110-180 0-330-110-330-276'/%3E%3Cpath opacity='.16' d='M760 520c-30-60-0-170 40-250C870 130 1010 20 1200-40M-20 140c160-40 330-20 460 50s250 100 380 60'/%3E%3Cpath opacity='.13' d='M-20 250c170-30 340 0 470 70s260 110 390 70M-20 380c180-20 350 20 480 90s240 90 340 60'/%3E%3Cpath opacity='.1' d='M-20 40c150-50 310-50 440 10s240 80 330 40'/%3E%3C/g%3E%3C/svg%3E");background-size:cover;background-position:center}
+.herotop{display:flex;flex-wrap:wrap;gap:4px 14px;align-items:baseline;padding-block:14px 0}
+.heromain{padding-top:clamp(18px,3vw,36px)}.hero .sub,.hero .mhelp,.hero .note{color:var(--hm)}.hero .mhelp b{color:var(--hi)}
+.hero h1{font-size:clamp(30px,4.2vw,54px);font-weight:760;max-width:22ch;letter-spacing:-.01em}
+.hero .lnk{color:#7cc6f2}
+.figs{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:0;margin-top:26px;border-top:1px solid rgba(169,188,205,.35)}
+.fig1{padding:14px 18px 2px 0}.fig1+.fig1{padding-left:18px;border-left:1px solid rgba(169,188,205,.25)}
+.fig1 b{display:block;font:760 clamp(26px,3vw,40px)/1.05 Archivo,system-ui,sans-serif;font-stretch:112%;white-space:nowrap;color:var(--hi)}.fig1 span{font-size:13px;color:var(--hm)}
+@media(max-width:760px){.figs{grid-template-columns:repeat(2,minmax(0,1fr))}.fig1:nth-child(3){padding-left:0;border-left:0}.fig1:nth-child(n+3){border-top:1px solid rgba(169,188,205,.2);margin-top:8px}}
+.viewbtn{display:none}
+@media(max-width:760px){.bar{position:sticky;top:0}.viewbtn{display:flex;width:100%;align-items:center;justify-content:space-between;gap:12px;min-height:52px;padding:8px max(4vw,16px);border:0;background:var(--bg);color:var(--ink);font-size:14px;text-align:left;cursor:pointer}
+ .viewbtn #viewsum{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.vb2{flex:none;padding:6px 12px;border:1px solid var(--line);border-radius:8px;font-weight:600}
+ .bar #ctls{display:none;max-height:70vh;overflow-y:auto;border-top:1px solid var(--line)}.bar.open #ctls{display:flex}
+ .seg{flex-wrap:nowrap;overflow-x:auto;max-width:100%}.ctl{max-width:100%}.chips{flex-wrap:nowrap;overflow-x:auto;padding-bottom:4px;max-width:100%}.chip{flex:none}
+ .sc th:first-child,.sc td:first-child{position:sticky;left:0;background:var(--bg);z-index:1}}
+.summary li{color:var(--ink)}@media(max-width:760px){.hero .sub,.hero .mhelp{font-size:15px}.hero h1{font-size:clamp(28px,8vw,38px)}.figs{margin-top:18px}}details.method{margin-top:6px}
+.brand{color:var(--hi);font-stretch:120%;font:700 17px/1.2 Archivo,system-ui,sans-serif;text-decoration:none}.bname{font-size:14px;color:var(--hm)}.fresh{margin-left:auto;font-size:13px;color:var(--hm)}
 .acts{display:flex;gap:8px;flex-wrap:wrap}.btn2{min-height:44px;padding:0 14px;border:1px solid var(--line);border-radius:8px;background:var(--bg);cursor:pointer;font-size:14px}.btn2:hover{border-color:var(--border)}
 .wall{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px 28px}@media(max-width:700px){.wall{grid-template-columns:minmax(0,1fr)}}
-.pan h3{margin:0 0 4px;font:600 15px/1.3 Inter,sans-serif}.pan h3 small{color:var(--mute);font-weight:500}.pan canvas{display:block;width:100%;cursor:crosshair}
+.pan h3{margin:0 0 4px;font:600 15px/1.3 Archivo,system-ui,sans-serif}.pan h3 small{color:var(--mute);font-weight:500}.pan canvas{display:block;width:100%;cursor:crosshair}
 .cbar{margin-top:16px}.cbar .sw2{display:flex;height:14px;border-radius:3px;overflow:hidden}.cbar .sw2 i{flex:1}.cbar .lb{position:relative;height:18px;font-size:13px;color:var(--mute)}.cbar .lb span{position:absolute;transform:translateX(-50%);white-space:nowrap}
 #casetbl td.best{font-weight:700}
-.deep{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:28px;margin-top:12px}.deep h3{margin:0 0 4px;font:600 17px/1.3 "Space Grotesk",Inter,sans-serif}
+.deep{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:28px;margin-top:12px}.deep h3{margin:0 0 4px;font:600 17px/1.3 Archivo,system-ui,sans-serif}
 .rows .r{display:grid;grid-template-columns:9em minmax(0,1fr) 5.5em;gap:10px;align-items:center;font-size:14px;margin:7px 0}
 .rows .t{height:12px;background:var(--panel);border-radius:3px;position:relative}.rows .t i{position:absolute;top:0;bottom:0;left:0;border-radius:0 4px 4px 0;background:var(--c)}.rows .t i.neg{left:auto;border-radius:4px 0 0 4px}
 .rows .r b{text-align:right;font-weight:500;font-variant-numeric:tabular-nums;white-space:nowrap}
@@ -71,7 +86,7 @@ tr.baserow td{font-style:italic;color:var(--mute)}
 .mhelp{font-size:15px;margin:10px 0 0;max-width:90ch}.lnk{border:0;background:none;color:var(--accent);padding:0;cursor:pointer;text-decoration:underline;font-size:15px;min-height:28px}
 .guide{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:12px;margin-top:14px}
 .gc{display:flex;flex-direction:column;gap:6px;text-align:left;background:var(--panel);border:2px solid transparent;border-radius:10px;padding:14px;cursor:pointer;font-size:14px;line-height:1.45;color:var(--ink)}
-.gc b{font:600 17px/1.2 "Space Grotesk",Inter,sans-serif}.gc .tag{font-size:12px;color:var(--mute)}.gc .q{font-weight:600}.gc .r{color:var(--mute)}.gc .u{border-top:1px solid var(--line);padding-top:6px}
+.gc b{font:600 17px/1.2 Archivo,system-ui,sans-serif}.gc .tag{font-size:12px;color:var(--mute)}.gc .q{font-weight:600}.gc .r{color:var(--mute)}.gc .u{border-top:1px solid var(--line);padding-top:6px}
 .gc.on{border-color:var(--ink)}.gc:hover{border-color:var(--border)}.gc:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
 .two{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,1fr);gap:28px}@media(max-width:1000px){.two{grid-template-columns:minmax(0,1fr)}}
 .fig{position:relative;min-height:320px}.fig>svg{position:absolute;inset:0;width:100%;height:100%}
@@ -89,14 +104,16 @@ ul.notes{padding-left:1.2em;font-size:15px;color:var(--mute)}ul.notes li{margin:
 a{color:var(--accent)}
 @media(max-width:600px){table{font-size:13px}th,td{padding:6px}}
 </style></head><body>
-<div class="brandbar"><div class="band"><a class="brand" href="https://wall.cloud">wall.cloud</a><span class="bname">Forecast Verification Bench</span><span class="fresh" id="fresh"></span></div></div>
-<header class="band">
+<header class="hero">
+<div class="band herotop"><a class="brand" href="https://wall.cloud" aria-label="wall.cloud home">wall.cloud</a><span class="bname">Forecast Verification Bench</span><span class="fresh" id="fresh"></span></div>
+<div class="band heromain">
 <h1 id="title">Loading scores…</h1>
 <p class="sub" id="subtitle"></p>
 <p class="mhelp" id="mhelp"></p>
 <div class="figs" id="figs"></div>
+</div>
 </header>
-<div class="bar"><div class="band">
+<div class="bar" id="bar"><button class="viewbtn" id="viewbtn" aria-expanded="false" aria-controls="ctls"><span id="viewsum">Change view</span><span class="vb2">Change</span></button><div class="band" id="ctls">
 <label class="ctl">Domain<select id="region"></select></label>
 <div class="ctl">Variable<div class="seg" id="var"><button data-v="temperature_2m" aria-pressed="true">2-m temperature</button><button data-v="precipitation_surface" aria-pressed="false">Precipitation</button></div></div>
 <label class="ctl">Metric<select id="metric"></select></label>
@@ -131,7 +148,7 @@ a{color:var(--accent)}
 <h2 id="casetitle">Storm case study</h2><label class="ctl" style="display:none;max-width:340px;margin:6px 0">Storm<select id="casepick"></select></label><p class="note" id="casenote"></p>
 <div class="seg" id="casemode" style="display:inline-flex;margin:6px 0 14px"><button data-c="total" aria-pressed="true">Totals</button><button data-c="diff" aria-pressed="false">Forecast − observed</button></div>
 <div class="wall" id="casewall"></div><div class="cbar" id="casebar"></div>
-<h3 style="margin:22px 0 4px;font:600 17px/1.3 'Space Grotesk',Inter,sans-serif">How each model did over North Carolina</h3><p class="note" id="casetnote"></p>
+<h3 style="margin:22px 0 4px;font:600 17px/1.3 Archivo,system-ui,sans-serif">How each model did over North Carolina</h3><p class="note" id="casetnote"></p>
 <div class="scroll"><table id="casetbl"></table></div><p class="note" id="casegauge"></p>
 </section>
 <section class="band">
@@ -149,7 +166,13 @@ a{color:var(--accent)}
 </section>
 <section class="band">
 <h2>About these scores</h2>
-<ul class="notes" id="notes"></ul>
+<ul class="notes summary">
+<li>Model scores come from the dynamical.org forecast scorecard: each model is checked against hourly airport (ASOS) observations at the nearest grid point. Short-range models only reach day 1 or 2.</li>
+<li>Climatology (a 10-year normal) and persistence ("same as yesterday") are baselines this site scores itself from the same observations.</li>
+<li>Rain is scored as 6-hour average rates, with "wet" meaning 0.1 mm an hour or more. Ensembles are scored on their mean, except CRPS.</li>
+<li>Everything updates each morning. Data: dynamical.org, CC BY-NC-SA 4.0.</li>
+</ul>
+<details class="method"><summary>Full method notes</summary><ul class="notes" id="notes"></ul></details>
 </section>
 </main>
 <div id="tip"></div>

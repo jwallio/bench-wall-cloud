@@ -37,7 +37,7 @@ precipitation_surface:[
  ['CRPS',2,'Ensemble rain accuracy','Scores the spread of ensemble rain forecasts against what fell. For single-run models it equals MAE.','0 is perfect; lower is better.','Use when comparing ensembles as probability forecasts of rain amount.']]};
 const gfor=(v,m)=>(GUIDE[v]||[]).find(g=>g[0]===m);
 const VARL={temperature_2m:'2-m temperature',precipitation_surface:'precipitation'};
-const S={lmode:'abs',region:'nc',_st:null,v:'temperature_2m',m:'RMSE',w:90,lead:1,units:'si',ref:'NOAA GFS',mapModel:'NOAA GFS',station:null,shown:new Set(['NOAA GFS','NOAA GEFS','NOAA HRRR','NOAA RRFS, virtual','ECMWF IFS ENS','ECMWF AIFS Single','ECMWF AIFS ENS','Google WeatherNext 2, virtual','Climatology','Persistence']),hover:null,group:'all',scmode:'score'};
+const S={lmode:'abs',region:'us',_st:null,v:'temperature_2m',m:'RMSE',w:90,lead:1,units:'si',ref:'NOAA GFS',mapModel:'NOAA GFS',station:null,shown:new Set(['NOAA GFS','NOAA GEFS','NOAA HRRR','NOAA RRFS, virtual','ECMWF IFS ENS','ECMWF AIFS Single','ECMWF AIFS ENS','Google WeatherNext 2, virtual','Climatology','Persistence']),hover:null,group:'all',scmode:'score'};
 let META,STATES,NC={},R=null,VM,W,L;const STC={};const hasSt=()=>!!(R&&!R.conus&&Object.keys(NC).length);
 
 /* ---------- data access ---------- */
@@ -182,7 +182,7 @@ function skillSeries(obj,model){const a=series(obj,model),c=series(obj,'Climatol
 function horizon(obj,model){const k=skillSeries(obj,model);if(!k.some(Number.isFinite))return null;let d=-1;for(let i=0;i<k.length;i++){if(!Number.isFinite(k[i]))break;if(k[i]>0)d=i;else break}const last=k.reduce((a,v,i)=>Number.isFinite(v)?i:a,-1);return{d,beyond:d===last&&last===L.length-1,last}}
 function renderHead(){const sc=scope(),ms=models(sc).filter(m=>!m.base),ev=ms.map(m=>[m,series(sc.obj,m.id)[S.lead]]).filter(r=>Number.isFinite(r[1])).sort((a,b)=>dist(a[1])-dist(b[1]));
  const per=`the last ${S.w} days through ${new Date(META.period_end+'T12:00:00Z').toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'})}`;
- $('#subtitle').textContent=`${VARL[S.v][0].toUpperCase()+VARL[S.v].slice(1)} · ${MET[S.m].l} · ${sc.name} · day-${S.lead} forecasts verified against ASOS observations over ${per}`;
+ $('#subtitle').textContent=`Day-${S.lead} ${VARL[S.v]} forecasts for ${sc.name}, scored by ${MET[S.m].l} against ASOS observations over ${per}.`;
  if(!ev.length){$('#title').textContent=`No ${MET[S.m].l} scores at day ${S.lead} for the models shown`;$('#figs').innerHTML='';return}
  const[best,bv]=ev[0],gfs=ev.find(r=>r[0].id==='NOAA GFS'),worst=ev[ev.length-1];
  $('#title').textContent=`${best.s} had the best ${VARL[S.v]} ${MET[S.m].l} ${sc.kind==='station'?'at '+stName(S.station):'in '+sc.name} at day ${S.lead}`;
@@ -330,8 +330,9 @@ function scorecardCSV(){const sc=scope(),ms=models(sc),rows=[['model',...L.map(d
  return head+rows.map(r=>r.map(x=>/[",\n]/.test(String(x))?`"${String(x).replace(/"/g,'""')}"`:x).join(',')).join('\n')}
 function download(name,text){const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([text],{type:'text/csv'}));a.download=name;document.body.appendChild(a);a.click();setTimeout(()=>{URL.revokeObjectURL(a.href);a.remove()},500)}
 
+function viewSummary(){const r=REG[S.region];$('#viewsum').textContent=[r?(r.conus?'United States':r.name):'',S.v==='temperature_2m'?'temperature':'precipitation',MET[S.m].l,`last ${S.w} days`,`day ${S.lead}`].join(', ')}
 /* ---------- controls ---------- */
-function renderAll(){if(!META)return;fillGroups();renderGuide();renderHead();drawMap();renderFocus();renderScores();renderStrip();renderDeep();renderCase();writeURL()}
+function renderAll(){if(!META)return;fillGroups();renderGuide();renderHead();drawMap();renderFocus();renderScores();renderStrip();renderDeep();renderCase();writeURL();viewSummary()}
 function setLead(i){S.lead=i;$$('#lead button').forEach(b=>b.setAttribute('aria-pressed',+b.dataset.i===i));renderAll()}
 function fillMetric(){const have=new Set(VM.filter(([v])=>v===S.v).map(([,m])=>m)),g=GUIDE[S.v].filter(x=>have.has(x[0]));if(!have.has(S.m))S.m=g[0][0];
  const opt=x=>`<option value="${x[0]}"${x[0]===S.m?' selected':''}>${esc(MET[x[0]].l)} · ${esc(x[2])}</option>`;
@@ -344,7 +345,7 @@ function renderGuide(){const g=gfor(S.v,S.m);$('#mhelp').innerHTML=g?`<b>${esc(M
  $('#guide').onclick=e=>{const b=e.target.closest('button.gc');if(!b)return;S.m=b.dataset.m;fillMetric();renderAll()}}
 function fillMapModel(){$('#mapmodel').innerHTML=`<option value="__best"${S.mapModel==='__best'?' selected':''}>Best model at each ${'location'}</option><optgroup label="One model">`+MS.map(m=>`<option value="${esc(m.id)}"${m.id===S.mapModel?' selected':''}>${esc(m.s)}</option>`).join('')+'</optgroup>'}
 function bestAt(obj,scp){let b=null,bv=Infinity;for(const m of MS){if(m.base||!S.shown.has(m.id)||!covers(m.id,scp))continue;const se=series(obj,m.id);const v=se?dist(se[S.lead]):Infinity;if(v<bv){bv=v;b=m}}return b}
-async function setRegion(id,keepStation){const reg=REG[id]||REG.nc;S.region=reg.id;if(!keepStation)S.station=null;$('#region').value=reg.id;
+async function setRegion(id,keepStation){const reg=REG[id]||REG.us;S.region=reg.id;if(!keepStation)S.station=null;$('#region').value=reg.id;
  $('#map').innerHTML='<p class="msg">Loading the map…</p>';
  NC={};const stp=reg.conus?Promise.resolve({}):loadStations(reg.abbr).catch(()=>({}));
  try{await loadTopo();const st=await stp;if(S.region!==reg.id)return;NC=st;R=prep(reg)}catch(err){NC=await stp;R={...reg,feats:[],stations:[]}}
@@ -369,6 +370,7 @@ function wire(){
  $('#share').onclick=async()=>{writeURL();const b=$('#share');try{await navigator.clipboard.writeText(location.href);b.textContent='Link copied'}catch(e){b.textContent='Copy the address bar'}setTimeout(()=>b.textContent='Copy link',2000)};
  $('#csv').onclick=()=>download(`bench-${S.region}-${S.v==='temperature_2m'?'t2m':'precip'}-${S.m}-${S.w}d.csv`,scorecardCSV());
  $('#ref').onchange=e=>{S.ref=e.target.value;renderScores();renderDeep();writeURL()};
+ $('#viewbtn').onclick=()=>{const b=$('#bar'),o=!b.classList.contains('open');b.classList.toggle('open',o);$('#viewbtn').setAttribute('aria-expanded',o);$('.vb2').textContent=o?'Done':'Change'};
  $('#casemode').onclick=e=>{const b=e.target.closest('button');if(!b)return;caseMode=b.dataset.c;$$('#casemode button').forEach(x=>x.setAttribute('aria-pressed',x===b));drawCase()};
  $('#scmode').onclick=e=>{const b=e.target.closest('button');if(!b)return;S.scmode=b.dataset.s;$$('#scmode button').forEach(x=>x.setAttribute('aria-pressed',x===b));renderScores()};
  $('#group').onchange=e=>{S.group=e.target.value;S.station=null;renderAll()};
@@ -395,6 +397,6 @@ const redraw=()=>renderAll();new MutationObserver(redraw).observe(document.docum
 addEventListener('hashchange',()=>{const h=location.hash.slice(1).toLowerCase();if(REG[h]&&h!==S.region)setRegion(h)});
 Promise.all(['meta','states'].map(n=>fetch(`data/${n}.json`).then(r=>{if(!r.ok)throw new Error(n);return r.json()}))).then(([m,s])=>{META=m;STATES=s;VM=m.vm;W=m.windows;L=m.leads;for(const st of m.stations)STI[st.id]=st;
  readURL();wire();const fd=new Date(m.period_end+'T12:00:00Z').toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'});
- $('#fresh').textContent=`Verified through ${fd}`+(m.built?` · rebuilt ${m.built.replace('T',' ').replace('Z',' UTC')}`:'');
+ $('#fresh').textContent=`Verified through ${fd}`;
  if(S._st)S.station=S._st;setRegion(S.region,!!S._st)}).catch(()=>{$('#title').textContent='The score files did not load';$('#subtitle').textContent='Reload the page to try again.'});
 }
