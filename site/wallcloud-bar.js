@@ -79,7 +79,7 @@
     ".contact span{color:var(--wc-sky)}",
     "@media(max-width:820px){",
     ".in{width:min(100% - 2rem,1240px)}",
-    ".head{grid-template-columns:1fr auto;gap:0 1rem;border-bottom:0}",
+    ".head{grid-template-columns:1fr auto;gap:0 1rem;border-bottom:0;min-height:0;padding-top:6px}",
     "nav{grid-column:1/-1;grid-row:2;justify-content:space-between;gap:1rem;border-top:1px solid var(--wc-line);border-bottom:1px solid var(--wc-line);overflow-x:auto;scrollbar-width:none}",
     "nav::-webkit-scrollbar{display:none}",
     "}",
@@ -160,7 +160,27 @@
     var first = document.body.firstElementChild;
     var skip = first && first.matches && first.matches('a[href^="#"]') ? first : null;
     document.body.insertBefore(bar, skip ? skip.nextSibling : document.body.firstChild);
-    if (showFooter) document.body.appendChild(mount(footerHTML(), "footer"));
+    if (showFooter) {
+      var footer = mount(footerHTML(), "footer");
+      document.body.appendChild(footer);
+      keepLast(footer);
+    }
+  }
+
+  // Apps that render with JavaScript (React, etc.) often add their page after this script has run,
+  // which would leave the footer above the content. Keep the footer after the page's last visible element.
+  function keepLast(footer) {
+    var SKIP = { SCRIPT: 1, STYLE: 1, LINK: 1, TEMPLATE: 1, NOSCRIPT: 1, META: 1 };
+    var queued = false;
+    function check() {
+      queued = false;
+      for (var el = document.body.lastElementChild; el && el !== footer; el = el.previousElementSibling) {
+        if (!SKIP[el.tagName]) { document.body.appendChild(footer); return; }
+      }
+    }
+    new MutationObserver(function () {
+      if (!queued) { queued = true; (window.requestAnimationFrame || setTimeout)(check); }
+    }).observe(document.body, { childList: true });
   }
 
   if (document.body) init();
