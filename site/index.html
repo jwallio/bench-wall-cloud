@@ -6,7 +6,7 @@
 <meta property="og:description" content="How well do weather models really do? Daily scores at 2,600+ U.S. stations, with climatology and persistence baselines.">
 <meta property="og:type" content="website"><meta property="og:url" content="https://bench.wall.cloud/"><meta property="og:image" content="https://bench.wall.cloud/og.png">
 <meta name="twitter:card" content="summary_large_image"><link rel="canonical" href="https://bench.wall.cloud/">
-<link rel="icon" href="favicon.svg" type="image/svg+xml"><meta name="theme-color" content="#10141b">
+<link rel="icon" href="favicon.svg" type="image/svg+xml"><meta name="theme-color" content="#08131b">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Space+Grotesk:wght@600;700&display=swap" rel="stylesheet">
 <style>
@@ -54,8 +54,8 @@ button:focus-visible,select:focus-visible,td:focus-visible{outline:2px solid var
 .focus{background:var(--panel);border-radius:10px;padding:12px 14px;margin-top:16px}
 .focus button{min-height:36px;margin-top:6px;border:1px solid var(--line);background:var(--bg);border-radius:8px;padding:0 12px;cursor:pointer}
 .msg{padding:40px 0;color:var(--mute)}
-.brandbar{background:var(--ink);color:var(--bg)}.brandbar .band{display:flex;flex-wrap:wrap;gap:4px 14px;align-items:baseline;padding-block:10px}
-.brand{color:var(--bg);font:700 17px/1.2 "Space Grotesk",Inter,sans-serif;text-decoration:none}.bname{font-size:14px;opacity:.85}.fresh{margin-left:auto;font-size:13px;opacity:.7}
+.brandbar{background:var(--panel);color:var(--ink);border-bottom:1px solid var(--line)}.brandbar .band{display:flex;flex-wrap:wrap;gap:4px 14px;align-items:baseline;padding-block:10px}
+.brand{color:var(--ink);font:700 17px/1.2 "Space Grotesk",Inter,sans-serif;text-decoration:none}.fresh{margin-left:auto;font-size:13px;color:var(--mute)}
 .acts{display:flex;gap:8px;flex-wrap:wrap}.btn2{min-height:44px;padding:0 14px;border:1px solid var(--line);border-radius:8px;background:var(--bg);cursor:pointer;font-size:14px}.btn2:hover{border-color:var(--border)}
 .wall{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px 28px}@media(max-width:700px){.wall{grid-template-columns:minmax(0,1fr)}}
 .pan h3{margin:0 0 4px;font:600 15px/1.3 Inter,sans-serif}.pan h3 small{color:var(--mute);font-weight:500}.pan canvas{display:block;width:100%;cursor:crosshair}
@@ -89,7 +89,7 @@ ul.notes{padding-left:1.2em;font-size:15px;color:var(--mute)}ul.notes li{margin:
 a{color:var(--accent)}
 @media(max-width:600px){table{font-size:13px}th,td{padding:6px}}
 </style></head><body>
-<div class="brandbar"><div class="band"><a class="brand" href="https://wall.cloud">wall.cloud</a><span class="bname">Forecast Verification Bench</span><span class="fresh" id="fresh"></span></div></div>
+<div class="brandbar"><div class="band"><a class="brand" href="/">Forecast Verification Bench</a><span class="fresh" id="fresh"></span></div></div>
 <header class="band">
 <h1 id="title">Loading scores…</h1>
 <p class="sub" id="subtitle"></p>
@@ -155,4 +155,5 @@ a{color:var(--accent)}
 <div id="tip"></div>
 <script src="vendor/geo-1.min.js"></script>
 <script src="app.js"></script>
+<script src="wallcloud-bar.js" data-site="bench"></script>
 </body></html>
